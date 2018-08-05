@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component  } from 'react';
+import { Actions } from 'react-native-router-flux';
 
 import { View,
     TextInput,
@@ -6,7 +7,9 @@ import { View,
     Button,
     ImageBackground,
     Text,
-    ActivityIndicator } from 'react-native';
+    ActivityIndicator,
+    BackHandler
+    } from 'react-native';
 import { connect } from 'react-redux';
 import { modificaNome,
         modificaEmail,
@@ -16,12 +19,41 @@ import { modificaNome,
 class formCadastro extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            loading: false,
-        }
+        this.handleBackPress = this.handleBackPress.bind(this)
     }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress.bind(this));
+      }
+    
+      componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress.bind(this));
+      }
+    
+      handleBackPress = () => {
+        this.Actions.pop();
+        this.goBack();
+        return true;
+      }
+
     _cadastroUsuario() {
         this.props.cadastroUsuario(this.props)
+    }
+
+    renderBtnCadastro() {
+        if(this.props.loadingEmAndamento){
+            return (
+                <ActivityIndicator size='large' />
+            )
+        }
+        return (
+            <Button 
+            color = '#115E54'
+            title = 'Cadastrar'
+            onPress = {()=> this._cadastroUsuario()
+            }
+        />
+        )
     }
     
 
@@ -55,13 +87,7 @@ class formCadastro extends Component {
                         <Text style={styles.textErro} >{this.props.erroCadastro}</Text>
                     </View>
                     <View style = {styles.viewButton}>
-                        <Button 
-                            color = '#115E54'
-                            title = 'Cadastrar'
-                            onPress = {()=> this._cadastroUsuario()
-                            }
-                        />
-                        
+                        {this.renderBtnCadastro()}
                     </View>
                 </View>
         </ImageBackground>
@@ -74,7 +100,8 @@ const mapStateToProps = state => (
         nome: state.AutenticacaoReducer.nome,
         email: state.AutenticacaoReducer.email,
         senha: state.AutenticacaoReducer.senha,
-        erroCadastro: state.AutenticacaoReducer.erroCadastro
+        erroCadastro: state.AutenticacaoReducer.erroCadastro,
+        loadingEmAndamento: state.AutenticacaoReducer.loadingEmAndamento
     }
 );
 

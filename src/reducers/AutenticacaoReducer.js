@@ -1,44 +1,40 @@
+import { MODIFICA_EMAIL,
+    MODIFICA_NOME,
+    MODIFICA_SENHA,
+    CADASTRO_USUARIO_SUCESSO,
+    CADASTRO_USUARIO_ERRO,
+    LOGIN_SUCESSO,
+    LOGIN_ERRO,
+    LOADING_EM_ANDAMENTO } from '../actions/types'
+
 const INITIAL_STATE = {
     nome: '',
     email: '',
     senha: '',
-    erroCadastro: ''
+    erroCadastro: '',
+    loginErro: '',
+    loadingEmAndamento: false
 };
 
 export default ( state = INITIAL_STATE, action ) => {
-    if (action.type === 'modifica_email')
-        return {...state, email: action.payload}
-    
-    if (action.type === 'modifica_nome')
-        return {...state, nome: action.payload }
-    
-    if (action.type === 'modifica_senha')
-        return { ...state, senha: action.payload }
-    
-    if (action.type === 'cadastro_usuario_erro' )
-        return { 
-            ...state,
-            erroCadastro: action.payload === 'auth/weak-password' ? 'A senha deve conter no mínimo 6 caracteres' : 'Email já cadastrado' }
-     
-    if (action.type === 'cadastro_usuario_sucesso')
-        return {
-            ...state,
-            nome: '',
-            senha: ''
-        }
-    
-    if (action.type === 'login_sucesso')
-        console.log('sucesso')
-        return {
-            ...state,
-            nome: '',
-            senha: ''
-        }
-    
-    if (action.type === 'login_erro')
-        return {
-            ...state,
-            nome: '',
-            senha: ''
-        }
-};
+    switch(action.type){
+        case MODIFICA_EMAIL:
+            return { ...state, email: action.payload };
+        case MODIFICA_NOME:
+            return {...state, nome: action.payload };
+        case MODIFICA_SENHA:
+            return { ...state, senha: action.payload };
+        case CADASTRO_USUARIO_ERRO:
+            return { ...state, erroCadastro: action.payload, loadingEmAndamento: false };
+        case CADASTRO_USUARIO_SUCESSO:
+            return { ...state, nome: '', senha: '', loadingEmAndamento: false };
+        case LOGIN_ERRO:
+            return { ...state, loginErro: action.payload, loadingEmAndamento: false };
+        case LOGIN_SUCESSO:
+            return { ...state, nome: '', senha: '', loadingEmAndamento: false };
+        case LOADING_EM_ANDAMENTO:
+            return { ...state, loadingEmAndamento: true }
+        default:
+            return state
+    }
+};  

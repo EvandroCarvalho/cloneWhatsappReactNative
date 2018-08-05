@@ -9,22 +9,35 @@ import { View,
     StyleSheet, 
     TouchableHighlight,
     ImageBackground,
-    ActivityIndicator } from 'react-native';
+    ActivityIndicator
+    } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { modificaEmail,
     modificaSenha,
     autenticaUsuario } from '../actions/AutenticacaoActions'
 
-class formLogin extends Component {
+class FormLogin extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            loading : false,
-        }
     }
 
     _autenticaUsuario() {
         this.props.autenticaUsuario(this.props)
+    }
+
+    renderBtnAcessar() {
+        if (this.props.loadingEmAndamento)   {
+            return (
+                <ActivityIndicator size='large'/>
+            )
+        }
+        return (
+            <Button
+            color = '#115E54'
+            title = 'Acesssar'
+            onPress = {()=> this._autenticaUsuario()}
+            />
+        )
     }
     
     render () {
@@ -50,25 +63,15 @@ class formLogin extends Component {
                         secureTextEntry = {true}
                         placeholderTextColor = '#fff'
                     />
-                    <TouchableHighlight 
+                    <TouchableHighlight
                     onPress=  {() => Actions.formCadastro()}
                     >
-                        <Text style = {styles.textLink} >Ainda não tem cadastro? Cadastre-se</Text>
+                        <Text style = {styles.textLink} >Ainda não tem cadastro? Cadastre-se!</Text>
                     </TouchableHighlight>
                 </View>
-                <View>
-                { this.state.loading && this.props.erroCadastro === '' && 
-                            <ActivityIndicator animating={this.state.loading}
-                                size='large'
-                                color="#fff"/>
-                        }
-                </View>
                 <View style = {styles.viewButton}>
-                    <Button
-                        color = '#115E54'
-                        title = 'Acesssar'
-                        onPress = {()=> this._autenticaUsuario()}
-                    />
+                    <Text style={{color: 'red', fontSize:18}}>{this.props.loginErro}</Text>
+                    {this.renderBtnAcessar()}
                 </View>
             </View>
         </ImageBackground>
@@ -79,10 +82,12 @@ class formLogin extends Component {
 const mapStateToProps = state => (
     {
         email: state.AutenticacaoReducer.email,
-        senha: state.AutenticacaoReducer.senha
+        senha: state.AutenticacaoReducer.senha,
+        loginErro: state.AutenticacaoReducer.loginErro,
+        loadingEmAndamento: state.AutenticacaoReducer.loadingEmAndamento
     }
 )
-export default connect(mapStateToProps, { modificaEmail, modificaSenha, autenticaUsuario })(formLogin)
+export default connect(mapStateToProps, { modificaEmail, modificaSenha, autenticaUsuario })(FormLogin)
 
 
 
