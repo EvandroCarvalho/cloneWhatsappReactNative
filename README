@@ -1,0 +1,6 @@
+# npm install -g react-native-cli 
+# Crie uma pasta na raiz do projeto com o nome "firebase.js", nesta coloque as configurações do mesmo.
+# npm install
+# react-native run-android
+# Neste projeto além do react-native (na versão 0.55.4) foi utilizado router-flux para controlar as rotas, redux para controlar os estados e as ações,
+ redux thunk como middleware.
