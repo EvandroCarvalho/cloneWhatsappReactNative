@@ -4,7 +4,8 @@ import { MODIFICA_EMAIL_ADICIONAR_CONTATO,
         LISTA_CONTATO_USUARIO,
         MODIFICA_MENSAGEM_PARA_CONTATO,
         ENVIA_MENSAGEM_PARA_CONTATO,
-        LISTA_CONVERSA_USUARIO
+        LISTA_CONVERSA_USUARIO,
+        LISTA_CONVERSAS_USUARIO
          } from './types'
 
 import b64 from 'base-64';
@@ -145,6 +146,20 @@ export const conversaUsuarioFetch = contatoEmail => {
                 dispatch({ type: LISTA_CONVERSA_USUARIO, payload: snapshot.val() })
             })
     }
+}
+
+export const conversasUsuarioFetch = () => {
+    const { currentUser } = firebase.auth();
+
+    return dispatch => {
+        let usuarioEmailB64 = b64.encode(currentUser.email);
+
+        firebase.database().ref(`usuario_conversas/${usuarioEmailB64}`)
+            .on('value', snapshot => {
+                dispatch({type: LISTA_CONVERSAS_USUARIO, payload: snapshot.val()})
+            })
+    }
+
 }
 
 
