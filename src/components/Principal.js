@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, BackHandler } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
+import { connect } from 'react-redux';
 
 import TabBarMenu from './TabBarMenu'
 import Conversas from './Conversas';
 import Contatos from './Contatos'
+import { notificaNovaMensagem } from '../actions/AppActions';
 
-export default class Principal extends Component {
+class Principal extends Component {
   state = {
     index: 0,
     routes: [
@@ -17,6 +19,10 @@ export default class Principal extends Component {
 
   componentWillMount(){
     BackHandler.addEventListener('hardwareBackPress', this._onBackAndroid)
+  }
+
+  componentDidMount() {
+    this.props.notificaNovaMensagem()
   }
   
   _onBackAndroid = () => {
@@ -49,6 +55,8 @@ export default class Principal extends Component {
     );
   }
 }
+
+export default connect(null,{notificaNovaMensagem})(Principal)
 
 const styles = StyleSheet.create({
   container: {

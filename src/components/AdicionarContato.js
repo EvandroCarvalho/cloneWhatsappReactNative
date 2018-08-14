@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { View, TextInput, Button, ImageBackground, Text, BackHandler } from 'react-native';
+import { View, TextInput, Button, ImageBackground, Text, BackHandler, AppState } from 'react-native';
 import { connect } from 'react-redux';
 import { 
         modificaAdicionaContatoEmail,
@@ -15,7 +15,7 @@ import {
      componentWillMount(){
         BackHandler.addEventListener('hardwareBackPress', this._onBackAndroid)
       }
-      
+
       _onBackAndroid = () => {
         if (this.lastBackPressed) {
             Actions.pop();

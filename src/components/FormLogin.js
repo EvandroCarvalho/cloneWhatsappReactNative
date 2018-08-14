@@ -9,16 +9,31 @@ import { View,
     StyleSheet, 
     TouchableHighlight,
     ImageBackground,
-    ActivityIndicator
+    ActivityIndicator,
+    AppState
     } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { modificaEmail,
     modificaSenha,
     autenticaUsuario } from '../actions/AutenticacaoActions'
+import { modificaAppAtivoBackground } from '../actions/AppActions';
 
 class FormLogin extends Component {
     constructor(props) {
         super(props)
+    }
+
+    componentDidMount(){
+        AppState.addEventListener('change', (state) => {
+           if (state === 'active') {
+                this.props.modificaAppAtivoBackground(true)
+                console.log('state active');
+            } 
+          if(state === 'background'){
+                this.props.modificaAppAtivoBackground(false)
+                console.log('background');
+           }
+        })
     }
 
     _autenticaUsuario() {
@@ -45,7 +60,7 @@ class FormLogin extends Component {
         <ImageBackground style={{flex: 1, width: null}} source ={require('../img/bg.png')} >
             <View style = {styles.viewMain}>
                 <View style = {styles.viewTitle}>
-                    <Text style = {styles.textTitle} >WhatsApp Clone</Text>
+                    <Text style = {styles.textTitle} >talk</Text>
                 </View>
                 <View style = {styles.viewBody} >
                     <TextInput
@@ -84,10 +99,15 @@ const mapStateToProps = state => (
         email: state.AutenticacaoReducer.email,
         senha: state.AutenticacaoReducer.senha,
         loginErro: state.AutenticacaoReducer.loginErro,
-        loadingEmAndamento: state.AutenticacaoReducer.loadingEmAndamento
+        loadingEmAndamento: state.AutenticacaoReducer.loadingEmAndamento,
+        appActive: state.AppReducer.appActive
     }
 )
-export default connect(mapStateToProps, { modificaEmail, modificaSenha, autenticaUsuario })(FormLogin)
+export default connect(mapStateToProps, { modificaEmail, 
+    modificaSenha, 
+    autenticaUsuario, 
+    modificaAppAtivoBackground 
+    })(FormLogin)
 
 
 

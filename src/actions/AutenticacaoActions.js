@@ -35,6 +35,7 @@ export const modificaSenha = (senha) => {
 export const cadastroUsuario = (dadosUsuario) => {
     return dispatch => {
             dispatch({type:LOADING_EM_ANDAMENTO})
+            
             firebase.auth().createUserWithEmailAndPassword(dadosUsuario.email, dadosUsuario.senha)
             .then(user => {
                 let emailB64 = b64.encode(dadosUsuario.email);
@@ -59,10 +60,11 @@ const cadastroUsuarioErro = (error, dispatch) => {
 export const autenticaUsuario = (dadosLogin) => {
      return dispatch => {
         dispatch({type:LOADING_EM_ANDAMENTO})
-        firebase.auth().signInWithEmailAndPassword(dadosLogin.email,dadosLogin.senha)
-        .then(value => loginSucesso(dispatch ))
-        .catch(error => loginErro(error, dispatch))
+            firebase.auth().signInWithEmailAndPassword(dadosLogin.email,dadosLogin.senha)
+            .then(value => loginSucesso(dispatch ))
+            .catch(error => loginErro(error, dispatch))       
     }
+    
 }
 
 const loginSucesso = (dispatch) => {

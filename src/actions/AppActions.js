@@ -5,12 +5,13 @@ import { MODIFICA_EMAIL_ADICIONAR_CONTATO,
         MODIFICA_MENSAGEM_PARA_CONTATO,
         ENVIA_MENSAGEM_PARA_CONTATO,
         LISTA_CONVERSA_USUARIO,
-        LISTA_CONVERSAS_USUARIO
+        LISTA_CONVERSAS_USUARIO,
+        MODIFICA_APP_ACTIVE,
+        NOTIFICA_USUARIO
          } from './types'
 
 import b64 from 'base-64';
 import firebase from 'firebase';
-
 
 
 export const modificaAdicionaContatoEmail = email => {
@@ -160,6 +161,23 @@ export const conversasUsuarioFetch = () => {
             })
     }
 
+}
+
+export const modificaAppAtivoBackground = (flag) => {
+    return {type: MODIFICA_APP_ACTIVE, payload: flag }
+}
+
+export const notificaNovaMensagem = () => {
+    const { currentUser } = firebase.auth();
+    const usuarioLogado = currentUser.email;
+
+    return dispatch => {
+        let usuarioLogadoB64 = b64.encode(usuarioLogado);
+        firebase.database().ref(`mensagens/${usuarioLogadoB64}`)
+            .on('value', () => {
+                dispatch({type: NOTIFICA_USUARIO})
+            })
+    }
 }
 
 

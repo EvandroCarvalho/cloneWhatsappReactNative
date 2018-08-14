@@ -26,7 +26,7 @@ const TabBarMenu = props => (
                     </View>
                     <View style={{ justifyContent: 'center' }} >
                         <TouchableHighlight
-                            underlayColor = '#FFF'
+                            underlayColor = '#115E54'
                             onPress = { () => firebase.auth().signOut()
                                 .then( () => Actions.formLogin() ) 
                             }
